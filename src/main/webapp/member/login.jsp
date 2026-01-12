@@ -63,7 +63,7 @@
             callback: handleCredentialResponse
         });
         
-        // 구글 로그인 버튼 렌더링
+        // 구글 로그인 버튼 렌더링asdasda
         google.accounts.id.renderButton(
             document.getElementById("google-signin-button"),
             {
