@@ -10,7 +10,7 @@
 
 <%@ include file="../header.jsp" %>
     
-    <%-- 회원가입 폼 영역 --%>
+    <%-- 회원가입 폼 영역1 --%>
     <div class="sub-container">
         <div class="join-wrapper">
             <div class="join-card">
