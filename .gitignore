@@ -82,4 +82,6 @@ application-dev.properties
 *.swp
 *.swo
 
+# WEB-INF/classes 는 보통 빌드 산출물 (커밋 금지)
+src/main/webapp/WEB-INF/classes/
 
