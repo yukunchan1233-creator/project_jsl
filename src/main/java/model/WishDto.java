@@ -10,6 +10,14 @@ public class WishDto {
     private int views;
     private String  regdate;
     
+    // 제품 찜용 필드
+    private String type;  // "blog" 또는 "product"
+    private int pno;  // 제품 번호 (제품 찜일 경우)
+    private String product_name;  // 제품명
+    private String site_name;  // 사이트명
+    private int price;  // 가격
+    private String subcategory;  // 하위카테고리
+    
 	
     
     public int getWish_bno() {
@@ -60,6 +68,44 @@ public class WishDto {
 	}
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
+	}
+	
+	// 제품 찜용 getter/setter
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public int getPno() {
+		return pno;
+	}
+	public void setPno(int pno) {
+		this.pno = pno;
+	}
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+	public String getSite_name() {
+		return site_name;
+	}
+	public void setSite_name(String site_name) {
+		this.site_name = site_name;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getSubcategory() {
+		return subcategory;
+	}
+	public void setSubcategory(String subcategory) {
+		this.subcategory = subcategory;
 	}
 }
 

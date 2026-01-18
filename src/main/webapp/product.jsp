@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="model.*"%>
 <%@ page import="java.util.*"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 	String category = request.getParameter("cat");
 	String subcategory = request.getParameter("sub");
@@ -10,93 +11,52 @@
 	
 	ProductDao dao = new ProductDao();
 	List<ProductDto> list = dao.selectProducts(category, subcategory);
+	request.setAttribute("list", list);
+	request.setAttribute("category", category);
+	request.setAttribute("subcategory", subcategory);
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title><%= category %> - <%= subcategory %> - 홈트레이닝</title>
-<link rel="stylesheet" href="css/hometraining.css">
-</head>
-<body>
-	<!-- 상단 네비게이션 -->
-	<div class="top_navigation">
-		<header class="header">
-			<nav class="top_left">
-				<ul>
-					<li><a href="index.jsp">홈으로</a></li>
-				</ul>
-			</nav>
-			<nav class="top_right">
-				<ul>
-					<li><a href="">로그인</a></li>
-					<li><a href="">회원가입</a></li>
-				</ul>
-			</nav>
-		</header>
-	</div>
-	
-	<!-- 메인 메뉴 -->
-	<div class="gnb_group">
-		<h1>🏋️ 홈트레이닝 운동기구</h1>
-	</div>
-	
-	<!-- 서브 비주얼 -->
-	<div class="subvisual">
-		<h2><%= category %> - <%= subcategory %></h2>
-		<p>다양한 브랜드의 <%= subcategory %> 제품을 비교해보세요</p>
-	</div>
-	
-	<!-- 제품 목록 테이블 -->
-	<div class="container">
-		<table class="product-table">
-			<thead>
-				<tr>
-					<th>사이트</th>
-					<th>제품명</th>
-					<th>가격</th>
-					<th>후기 개수</th>
-					<th>상세보기</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% if(list.size() == 0) { %>
-				<tr>
-					<td colspan="5" style="text-align:center; padding:40px;">
-						등록된 제품이 없습니다.
-					</td>
-				</tr>
-				<% } else { %>
-					<% for(ProductDto dto : list) { %>
-					<tr>
-						<td><%= dto.getSite_name() %></td>
-						<td><%= dto.getProduct_name() %></td>
-						<td><%= String.format("%,d", dto.getPrice()) %>원</td>
-						<td><%= dto.getReview_count() %>개</td>
-						<td>
-							<button class="view-btn" onclick="location.href='detail.jsp?pno=<%= dto.getPno() %>'">
-								보기
-							</button>
-						</td>
-					</tr>
-					<% } %>
-				<% } %>
-			</tbody>
-		</table>
-	</div>
-	
-	<!-- 푸터 -->
-	<footer class="footer">
-		<div class="footer-inner">
-			<p>Copyright 홈트레이닝 운동기구 &copy; All Rights Reserved</p>
-		</div>
-	</footer>
-</body>
-</html>
+<%@ include file="header.jsp" %>
 
+<!-- サブビジュアル -->
+<div class="subvisual">
+	<h2>${category} - ${subcategory}</h2>
+	<p>様々なブランドの${subcategory}商品を比較してみてください</p>
+</div>
 
+<!-- 商品リスト : カード型 -->
+<div class="shop-container">
+    <div class="product-grid">
+        <c:choose>
+            <c:when test="${empty list || list.size() == 0}">
+                <div class="empty-box">登録された商品がありません。</div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="dto" items="${list}">
+                    <div class="product-card" onclick="location.href='detail.jsp?pno=${dto.pno}'">
+                        <div class="brand-row">
+                            <span class="site-badge">${dto.site_name}</span>
+                            <span class="review-count">レビュー ${dto.review_count}件</span>
+                        </div>
 
+                        <div class="product-name">${dto.product_name}</div>
 
+                        <div class="price-row">
+                            <span class="price"><%
+                                ProductDto item = (ProductDto)pageContext.getAttribute("dto");
+                                if(item != null) {
+                                    out.print(String.format("%,d", item.getPrice()) + "円");
+                                }
+                            %></span>
+                            <button class="view-btn" type="button"
+                                    onclick="event.stopPropagation(); location.href='detail.jsp?pno=${dto.pno}';">
+                                詳細を見る
+                            </button>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</div>
 
-
-
+<%@ include file="footer.jsp" %>

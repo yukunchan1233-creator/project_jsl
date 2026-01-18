@@ -12,27 +12,27 @@
     <div class="sub-container">
         <div class="login-wrapper">
             <div class="login-card">
-                <h2 class="login-title">로그인</h2>
-                <%-- 로그인 폼 --%>
+                <h2 class="login-title">ログイン</h2>
+                <%-- ログインフォーム --%>
                 <form id="myform" class="login-form">
                     <div class="form-group">
-                        <input type="text" name="userid" id="loginUserid" placeholder="아이디" class="form-input">
+                        <input type="text" name="userid" id="loginUserid" placeholder="ユーザーID" class="form-input">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" id="password" placeholder="비밀번호" class="form-input">
+                        <input type="password" name="password" id="password" placeholder="パスワード" class="form-input">
                     </div>
                     <div class="form-options">
                         <label class="checkbox-label">
                             <input type="checkbox" name="useridcheck" id="saveid">
-                            <span>아이디 저장</span>
+                            <span>ユーザーIDを保存</span>
                         </label>
                     </div>
-                    <%-- 로그인 에러 메시지가 표시되는 영역 --%>
+                    <%-- ログインエラーメッセージが表示される領域 --%>
                     <div id="errmsg" class="error-message"></div>
-                    <button type="button" class="btn-login" id="btn-login">로그인</button>
+                    <button type="button" class="btn-login" id="btn-login">ログイン</button>
                     
                     <div class="login-divider">
-                        <span>또는</span>
+                        <span>または</span>
                     </div>
                     
                     <div class="google-login-wrapper">
@@ -40,9 +40,9 @@
                     </div>
                     
                     <div class="login-links">
-                        <a href="" class="link-text">아이디·비밀번호 찾기</a>
+                        <a href="" class="link-text">ユーザーID・パスワードを探す</a>
                         <span class="divider">|</span>
-                        <a href="${pageContext.request.contextPath}/mem/join.do" class="link-text">회원가입</a>
+                        <a href="${pageContext.request.contextPath}/mem/join.do" class="link-text">会員登録</a>
                     </div>
                 </form>
             </div>
@@ -91,15 +91,15 @@
             },
             success: function(result) {
                 if(result === 'success') {
-                    alert('구글 로그인 성공!');
+                    alert('Googleログイン成功！');
                     window.location.href = contextPath + '/main.do';
 
                 } else {
-                    alert('구글 로그인 실패: ' + result);
+                    alert('Googleログイン失敗: ' + result);
                 }
             },
             error: function(xhr, status, error) {
-                alert('구글 로그인 중 오류가 발생했습니다.');
+                alert('Googleログイン中にエラーが発生しました。');
                 console.error(error);
             }
         });

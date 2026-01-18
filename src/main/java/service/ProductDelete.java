@@ -26,8 +26,16 @@ public class ProductDelete implements Command {
 		String pnoStr = request.getParameter("pno");
 		String subcategory = request.getParameter("sub");
 		
+		// subcategory 공백 제거 및 기본값 설정
+		if(subcategory != null) {
+			subcategory = subcategory.trim();
+		}
+		if(subcategory == null || subcategory.isEmpty()) {
+			subcategory = "런닝머신";
+		}
+		
 		if(pnoStr == null || pnoStr.isEmpty()) {
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory);
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + java.net.URLEncoder.encode(subcategory, "UTF-8"));
 			return;
 		}
 		
@@ -40,10 +48,10 @@ public class ProductDelete implements Command {
 		// 3단계: 결과에 따라 리다이렉트
 		if(result > 0) {
 			// 성공: 상품 목록 페이지로 이동
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory);
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + java.net.URLEncoder.encode(subcategory, "UTF-8"));
 		} else {
 			// 실패: 에러 메시지와 함께 목록 페이지로
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory + "&error=delete_failed");
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + java.net.URLEncoder.encode(subcategory, "UTF-8") + "&error=delete_failed");
 		}
 	}
 

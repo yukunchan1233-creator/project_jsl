@@ -35,6 +35,28 @@ public class ProductAdd implements Command {
 		String image_path = request.getParameter("image_path");
 		String buy_link = request.getParameter("buy_link");
 		
+		// subcategory 공백 제거
+		if(subcategory != null) {
+			subcategory = subcategory.trim();
+		}
+		
+		// 필수 필드 검증
+		if(category == null || category.isEmpty()) {
+			request.setAttribute("error", "카테고리를 선택해주세요.");
+			request.setAttribute("subcategory", subcategory);
+			request.getRequestDispatcher("/admin/product_form.jsp").forward(request, response);
+			return;
+		}
+		
+		if(site_name == null || site_name.isEmpty()) {
+			// site_name이 없으면 product_name에서 추출 시도
+			if(product_name != null && product_name.contains(" ")) {
+				site_name = product_name.split(" ")[0];
+			} else {
+				site_name = "기타";
+			}
+		}
+		
 		// 세션에서 관리자 아이디 가져오기
 		HttpSession session = request.getSession();
 		String userid = (String) session.getAttribute("userid");
@@ -78,7 +100,9 @@ public class ProductAdd implements Command {
 		// 4단계: 결과에 따라 리다이렉트
 		if(result > 0) {
 			// 성공: 상품 목록 페이지로 이동
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory);
+			// subcategory URL 인코딩
+			String encodedSub = java.net.URLEncoder.encode(subcategory, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + encodedSub);
 		} else {
 			// 실패: 에러 메시지와 함께 다시 추가 폼으로
 			request.setAttribute("error", "상품 추가에 실패했습니다.");

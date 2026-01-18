@@ -59,6 +59,10 @@ public class AdminProductController extends HttpServlet {
 		if("/add.do".equals(path)) {
 			// 상품 추가 폼
 			String subcategory = request.getParameter("sub");
+			// subcategory 공백 제거
+			if(subcategory != null) {
+				subcategory = subcategory.trim();
+			}
 			request.setAttribute("subcategory", subcategory);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/product_form.jsp");
 			dispatcher.forward(request, response);

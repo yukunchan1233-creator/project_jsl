@@ -6,7 +6,8 @@ public class MemberDto {
     private String password ;
     private String phone ;
     private String email;
-	
+    private String profile_image; // 프로필 사진 경로
+    
     public String getUserid() {
 		return userid;
 	}
@@ -36,6 +37,12 @@ public class MemberDto {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getProfile_image() {
+		return profile_image;
+	}
+	public void setProfile_image(String profile_image) {
+		this.profile_image = profile_image;
 	}
 }
 

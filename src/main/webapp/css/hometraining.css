@@ -12,8 +12,10 @@ a {text-decoration:none; color:#333;}
 	border-bottom:1px solid #e1e1e1;
 }
 .header {
-	width:1200px; 
-	margin:0 auto; 
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 40px;
 	display:flex; 
 	flex-direction:row; 
 	justify-content: space-between; 
@@ -23,22 +25,24 @@ a {text-decoration:none; color:#333;}
 	display: flex;
 }
 .top_left > ul li {
-	padding:16px 20px; 
-	border-left:1px solid #e1e1e1; 
-	border-right:1px solid #e1e1e1;
+	padding: 12px 14px;
+	/* border-left:1px solid #e1e1e1; */
+	/* border-right:1px solid #e1e1e1; */
 }
 .top_right > ul {
 	display: flex;
 }
 .top_right > ul li {
-	padding:16px 20px; 
-	border-right:1px solid #e1e1e1;
+	padding: 12px 14px;
+	/* border-right:1px solid #e1e1e1; */
 }
 
 /* 메인 메뉴 (가슴/등/하체/유산소) */
 .gnb_group {
-	width:1200px; 
-	margin:0 auto; 
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 40px;
 	display:flex; 
 	justify-content: space-between; 
 	height:84px; 
@@ -100,8 +104,10 @@ a {text-decoration:none; color:#333;}
 	position:relative;
 }
 .visual-inner {
-	width:1200px;
-	margin:0 auto;
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 40px;
 	height:400px;
 	position:relative;
 }
@@ -126,8 +132,10 @@ a {text-decoration:none; color:#333;}
 
 /* 메인 컨테이너 */
 .container {
-	width:1200px; 
-	margin:80px auto;
+	width: 100%;
+	max-width: 1400px;
+	margin: 80px auto;
+	padding: 0 40px;
 }
 .subvisual {
 	background:#eee; 
@@ -175,8 +183,10 @@ a {text-decoration:none; color:#333;}
 
 /* 제품 상세 페이지 */
 .product-detail {
-	width:1200px;
-	margin:40px auto;
+	width: 100%;
+	max-width: 1400px;
+	margin: 40px auto;
+	padding: 0 40px;
 }
 .product-detail h2 {
 	font-size:32px;
@@ -284,9 +294,10 @@ a {text-decoration:none; color:#333;}
 	margin-top:110px;
 }
 .footer .footer-inner {
-	width:1200px; 
-	margin:0 auto; 
-	padding:20px 0;
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px 40px;
 	text-align:center;
 }
 

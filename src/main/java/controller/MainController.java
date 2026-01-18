@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 	
 import service.BlogSelectIndex;
+import service.ReviewCarousel;
 
 /**
  * [메인 컨트롤러 - MainController]
@@ -46,10 +47,13 @@ public class MainController extends HttpServlet {
 		// 이 서비스는 DB에서 포트폴리오 목록을 조회하여 request.setAttribute("list", list)로 저장합니다.
 		new BlogSelectIndex().doCommand(request, response);
 		
+		// 2단계: ReviewCarousel 서비스 호출 (후기 캐러셀용)
+		new ReviewCarousel().doCommand(request, response);
+		
 		// 디버깅용: request에 저장된 list 확인
 		System.out.println("컨트롤러 직후: " + request.getAttribute("list"));
 		
-		// 2단계: index.jsp로 forward
+		// 3단계: index.jsp로 forward
 		// RequestDispatcher: 서버 내부에서 다른 페이지로 넘기는 도구
 		// getRequestDispatcher("index.jsp"): "다음 목적지는 index.jsp야" 라는 티켓을 끊는 느낌
 		// 브라우저가 index.jsp를 새로 요청하는 게 아니라, 서버 내부에서 index.jsp를 호출하는 것입니다.

@@ -17,30 +17,23 @@
             <input type="hidden" name="bno" value="${viewdto.bno }">
                 <table class="border-table">
                     <tr>
-                        <th>글쓴이</th>
+                        <th>作成者</th>
                         <td><input type="text" name="name" value="${viewdto.name }" readonly></td>
                     </tr>
                     <tr>
-                        <th>제목</th>
+                        <th>タイトル</th>
                         <td><input type="text" name="title" id="title" value="${viewdto.title }"></td>
                     </tr>
                     <tr>
-                        <th>내용</th>
+                        <th>内容</th>
                         <td>
-                        	<button type="button" id="btn-ai">AI글쓰기</button>
-                        	<select name="lang" id="btn-translate" style="padding:6px 12px;display:inline-block;width:120px;">
-                        		<option value="">언어선택</option>
-                        		<option value="jp">일본어</option>
-                        		<option value="en">영어</option>
-                        		<option value="ch">중국어</option>
-                        	</select>
                         	<span style="display:block; padding:10px 0;">
                         	<textarea name="content" id="content">${viewdto.content}</textarea>
                         	</span>
                         </td>
                     </tr>
                     <tr>
-                        <th>첨부파일</th>
+                        <th>添付ファイル</th>
                         <td>
                             <input type="file" name="imgFile">
                             <img src="${pageContext.request.contextPath}/img/${viewdto.imgfile }" alt="" style="width:36px; height:36px;">
@@ -48,9 +41,9 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button type="submit" class="submit">수정글 저장</button>
-                            <button type="reset" class="reset" onclick="alert('모두 지우고 다시쓸래요?')">다시쓰기</button>
-                            <button type="button" class="list" onclick="location.href='${pageContext.request.contextPath}/port/list.do'">목록</button>
+                            <button type="submit" class="submit">編集を保存</button>
+                            <button type="reset" class="reset" onclick="alert('全て消去して書き直しますか？')">書き直し</button>
+                            <button type="button" class="list" onclick="location.href='${pageContext.request.contextPath}/port/list.do'">リスト</button>
                         </td>
                     </tr>
                 </table>
@@ -64,60 +57,19 @@
     
 	function check() {
 		if(!my.title.value) {
-			alert("제목입력");
+			alert("タイトルを入力してください");
 			my.title.focus();
 			return false;
 		}
 		if(!my.content.value) {
-			alert("내용입력");
+			alert("内容を入力してください");
 			my.content.focus();
 			return false;
 		}
-		alert("수정완료");
+		alert("編集完了");
 		return true;
 	}
 	
-	$("#btn-ai").click(function() {
-		let title = $("#title").val();
-		if(!title) {
-			alert("제목 입력");
-			return;
-		}
-		$.ajax({
-			type:"post",
-			url: contextPath + "/port/aiWrite.do",
-			data:{title:title},
-			success:function(data) {
-				$("#content").val(data.content);
-			},
-			error: function() {
-				alert("AI 통신에러");
-			}
-		})
-	})
-	
-	$("#btn-translate").on("change",function() {
-		let lang = $(this).val();
-		let content = $("#content").val();
-		if(!lang) {
-			alert("번역할 언어를 선택");
-			return;
-		}
-		if(!content) {
-			alert("내용 입력");
-			return;
-		}
-		$.ajax({
-			type:"post",
-			url: contextPath + "/port/aiTranslate.do",
-			data:{lang:lang,content:content},
-			success:function(data) {
-				$("#content").val(data.translated);
-			},error:function() {
-				alert("AI 통신에러");
-			}
-		})
-	})
 </script>
     
 <%@ include file="../footer.jsp" %>

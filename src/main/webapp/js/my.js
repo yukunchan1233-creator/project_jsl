@@ -4,12 +4,12 @@ var contextPath = '/hometraining';
 //로그인 check() 함수 시작
 	function check() {
 		if(!my.userid.value){
-			alert("아이디를 입력하세요");
+			alert("ユーザーIDを入力してください");
 			my.userid.focus();
 			return false;
 		}
 		if(!my.password.value){
-			alert("비밀번호를 입력하세요");
+			alert("パスワードを入力してください");
 			my.password.focus();
 			return false;
 		}
@@ -17,12 +17,103 @@ var contextPath = '/hometraining';
 	}
 //jQuery 시작문
 $(function() {	
-	// 헤더 드롭다운 메뉴 (유산소운동, 근력운동)
-	$(".gnb_group .main_nav .nav_1depth > li").hover(function() {
-		$(this).find(".nav_2depth").stop(true).slideDown();
-	}, function() {
-		$(this).find(".nav_2depth").stop(true).slideUp();
-	});
+	// 헤더 드롭다운 메뉴 (유산소운동, 근력운동) - 메뉴 항목으로 이동해도 유지
+	$(".gnb_group .main_nav .nav_1depth > li").hover(
+		function() {
+			// 마우스 진입
+			$(this).find(".nav_2depth").stop(true, false).css({
+				'display': 'block',
+				'opacity': '1',
+				'transform': 'translateY(0)',
+				'pointer-events': 'auto'
+			});
+		},
+		function() {
+			// 마우스 이탈
+			var $menu = $(this).find(".nav_2depth");
+			var self = this;
+			setTimeout(function() {
+				if (!$menu.is(':hover') && !$(self).is(':hover')) {
+					$menu.css({
+						'display': 'none',
+						'opacity': '0',
+						'transform': 'translateY(-8px)',
+						'pointer-events': 'none'
+					});
+				}
+			}, 150);
+		}
+	);
+	
+	$(".gnb_group .main_nav .nav_2depth").hover(
+		function() {
+			// 메뉴 위에 마우스
+			$(this).css({
+				'display': 'block',
+				'opacity': '1',
+				'transform': 'translateY(0)',
+				'pointer-events': 'auto'
+			});
+		},
+		function() {
+			// 메뉴에서 마우스 이탈
+			$(this).css({
+				'display': 'none',
+				'opacity': '0',
+				'transform': 'translateY(-8px)',
+				'pointer-events': 'none'
+			});
+		}
+	);
+	
+	// 마이페이지 드롭다운 메뉴 (개인정보 수정, 찜 목록) - 메뉴 항목으로 이동해도 유지
+	$(".gnb_group .user_nav .mypage-dropdown").hover(
+		function() {
+			// 마우스 진입
+			$(this).find(".mypage-menu").stop(true, false).css({
+				'display': 'block',
+				'opacity': '1',
+				'transform': 'translateY(0)',
+				'pointer-events': 'auto'
+			});
+		},
+		function() {
+			// 마우스 이탈
+			var $menu = $(this).find(".mypage-menu");
+			var self = this;
+			setTimeout(function() {
+				if (!$menu.is(':hover') && !$(self).is(':hover')) {
+					$menu.css({
+						'display': 'none',
+						'opacity': '0',
+						'transform': 'translateY(-8px)',
+						'pointer-events': 'none'
+					});
+				}
+			}, 150);
+		}
+	);
+	
+	$(".gnb_group .user_nav .mypage-menu").hover(
+		function() {
+			// 메뉴 위에 마우스
+			$(this).css({
+				'display': 'block',
+				'opacity': '1',
+				'transform': 'translateY(0)',
+				'pointer-events': 'auto'
+			});
+		},
+		function() {
+			// 메뉴에서 마우스 이탈
+			$(this).css({
+				'display': 'none',
+				'opacity': '0',
+				'transform': 'translateY(-8px)',
+				'pointer-events': 'none'
+			});
+		}
+	);
 	
 	//회원가입 페이지에서만 writer 유효성 검사 실행
 	if($("#writer").length > 0) {
@@ -32,7 +123,7 @@ $(function() {
 			if(!$("#writer").val()) {
 				//만약에 아이디(#)가 writer인 태그의 값(val)이 없으면(!) 아래를 실행
 				//$(".writer-msg").text("사용자명을 입력하세요");
-				$(".writer-msg").html("<span style='color:#f00'>사용자명을 입력하세요</span>");
+				$(".writer-msg").html("<span style='color:#f00'>ユーザー名を入力してください</span>");
 				//클래스(.)이름이 writer-msg인 태그의 내용(html)을 변경
 				$("#writer").focus();
 				//커서를 다시 아이디(#)가 writer인 태그로 이동(focus)시킨다
@@ -47,7 +138,7 @@ $(function() {
 	if($("#userid").length > 0) {
 		$("#userid").blur(function() {    //아이디가 userid인 태그에서 다른곳으로 커서가 이동하면 (blur) 아래를 실행
 			if(!$("#userid").val()) {     //만약에 아이디(#)가 userid인 태그의 값(val)이 없으면(!) 아래를 실행
-				$(".userid-msg").html("<span style='color:#f00'>아이디는 필수 입력사항 입니다. 아이디를 입력하세요.</span>"); 		//클래스(.)이름이 userid-msg인 태그의 내용(html)을 변경
+				$(".userid-msg").html("<span style='color:#f00'>ユーザーIDは必須入力項目です。ユーザーIDを入力してください。</span>"); 		//클래스(.)이름이 userid-msg인 태그의 내용(html)을 변경
 				$("#userid").focus();
 				return;                 //커서를 다시 아이디(#)가 userid인 태그로 이동(focus)시킨다//함수 종료 
 			}else{
@@ -69,12 +160,12 @@ $(function() {
 				success:function(result) {//응답데이터받는 곳.
 					//alert("result : "+result);
 					if(result==1) {//중복아이디 있음
-						$(".userid-msg").html("<span style='color:#f00'>이미 사용중인 아이디 입니다.</span>");
+						$(".userid-msg").html("<span style='color:#f00'>既に使用中のユーザーIDです。</span>");
 					}else{
-						$(".userid-msg").html("<span style='color:#f00'>사용가능한 아이디 입니다.</span>");
+						$(".userid-msg").html("<span style='color:#f00'>使用可能なユーザーIDです。</span>");
 					}
 				},error:function() { //통신실패
-					alert("에러발생");
+					alert("エラーが発生しました");
 				}
 			});
 		});  //end of userid blur
@@ -84,7 +175,7 @@ $(function() {
 	if($("#btn-submit").length > 0) {
 			$("#password").blur(function() {
 				if(!$("#password").val()) {
-					$(".password-msg").html("<span style='color:#f00'>비밀번호는 필수 입력 사항입니다.</span>");
+					$(".password-msg").html("<span style='color:#f00'>パスワードは必須入力項目です。</span>");
 					$("#password").focus();
 				}
 			})
@@ -93,7 +184,7 @@ $(function() {
 				// 설명: pw2 필드에서 포커스가 벗어날 때 (blur 이벤트) 실행
 				if(!$("#pw2").val()) {
 					// 설명: pw2 필드의 값이 없으면 (!$("#pw2").val())
-					$(".pw2-msg").html("<span style='color:#f00'>비밀번호 확인 필수 입력 사항입니다.</span>");
+					$(".pw2-msg").html("<span style='color:#f00'>パスワード確認は必須入力項目です。</span>");
 					// 설명: pw2-msg 클래스를 가진 <p> 태그에 빨간색 에러 메시지 표시
 					$("#pw2").focus();
 					// 설명: 다시 pw2 필드로 커서 이동
@@ -104,20 +195,20 @@ $(function() {
 				let pw1 = $("#password").val(); //let 은 재선언 불가능, 값 재할당 가능
 				let pw2 = $("#pw2").val();
 				if(pw1 != pw2) {
-					$(".pw2-msg").html("<span style='color:#f00'>비밀번호가 일치하지 않습니다.</span>");
+					$(".pw2-msg").html("<span style='color:#f00'>パスワードが一致しません。</span>");
 				}else {
 					$(".pw2-msg").text("");
 				}
 			})
 			$("#email").blur(function() {
 				if(!$("#email").val()) {
-					$(".email-msg").html("<span style='color:#f00'>이메일을 입력하세요.</span>");
+					$(".email-msg").html("<span style='color:#f00'>メールアドレスを入力してください。</span>");
 					$("#email").focus();
 				}
 			})
 			$("#phone").blur(function() {
 				if(!$("#phone").val()) {
-					$(".phone-msg").html("<span style='color:#f00'>전화번호를 입력하세요.</span>");
+					$(".phone-msg").html("<span style='color:#f00'>電話番号を入力してください。</span>");
 					$("#phone").focus();
 				}
 			});
@@ -164,11 +255,11 @@ $(function() {
 		let userid = $("#loginUserid").val();
 		let password = $("#password").val();
 		if(!userid) {
-			$("#errmsg").html("<span style='color:#f00'>아이디를 입력하세요</span>");
+			$("#errmsg").html("<span style='color:#f00'>ユーザーIDを入力してください</span>");
 			return;
 		}
 		if(!password) {
-			$("#errmsg").html("<span style='color:#f00'>비밀번호를 입력하세요</span>");
+			$("#errmsg").html("<span style='color:#f00'>パスワードを入力してください</span>");
 			return;
 		}
 		$.ajax({
@@ -188,10 +279,10 @@ $(function() {
 					//메인페이지 이동
 					location.href = contextPath + '/main.do';
 				}else {
-					$("#errmsg").html("<span style='color:#f00'>아이디또는 비밀번호를 확인하세요</span>");
+					$("#errmsg").html("<span style='color:#f00'>ユーザーIDまたはパスワードを確認してください</span>");
 				}
 			},error:function() {
-				$("#errmsg").html("<span style='color:#f00'>서버에러 발생</span>");
+				$("#errmsg").html("<span style='color:#f00'>サーバーエラーが発生しました</span>");
 			}
 			
 		})
@@ -205,6 +296,8 @@ $(function() {
 	if(totalSlides > 0) {
 		// 첫 번째 슬라이드 초기화 (페이지 로드 시 첫 번째 슬라이드 표시)
 		$(".slider-wrapper").css("transform", "translateX(0%)");
+		
+		console.log("[슬라이더] 총 슬라이드 개수: " + totalSlides);
 		
 		// 슬라이드 이동 함수
 		function moveSlide(direction) {
@@ -227,14 +320,50 @@ $(function() {
 			$(".indicator").eq(currentSlide).addClass("active");
 		}
 		
+		// 자동 슬라이드 변수
+		let autoSlideInterval = null;
+		let isPaused = false;
+		
+		// 자동 슬라이드 시작 함수
+		function startAutoSlide() {
+			// 기존 인터벌이 있으면 제거
+			if(autoSlideInterval) {
+				clearInterval(autoSlideInterval);
+			}
+			// 3초마다 자동으로 다음 슬라이드
+			autoSlideInterval = setInterval(function() {
+				if(!isPaused) {
+					moveSlide('next');
+				}
+			}, 3000);
+		}
+		
+		// 자동 슬라이드 일시 정지 함수
+		function pauseAutoSlide() {
+			isPaused = true;
+			if(autoSlideInterval) {
+				clearInterval(autoSlideInterval);
+			}
+		}
+		
+		// 자동 슬라이드 재개 함수
+		function resumeAutoSlide() {
+			isPaused = false;
+			startAutoSlide();
+		}
+		
 		// 이전 버튼 클릭
 		$("#prevBtn").click(function() {
 			moveSlide('prev');
+			pauseAutoSlide();
+			setTimeout(resumeAutoSlide, 5000); // 5초 후 재개
 		});
 		
 		// 다음 버튼 클릭
 		$("#nextBtn").click(function() {
 			moveSlide('next');
+			pauseAutoSlide();
+			setTimeout(resumeAutoSlide, 5000); // 5초 후 재개
 		});
 		
 		// 인디케이터 클릭
@@ -250,12 +379,26 @@ $(function() {
 			// 인디케이터 업데이트
 			$(".indicator").removeClass("active");
 			$(this).addClass("active");
+			
+			pauseAutoSlide();
+			setTimeout(resumeAutoSlide, 5000); // 5초 후 재개
 		});
 		
-		// 자동 슬라이드 (선택사항 - 필요시 주석 해제)
-		// let autoSlide = setInterval(function() {
-		//     moveSlide('next');
-		// }, 5000); // 5초마다 자동으로 다음 슬라이드
+		// 마우스가 슬라이더 위에 있을 때 일시 정지
+		$(".mainvisual").hover(
+			function() {
+				pauseAutoSlide();
+			},
+			function() {
+				resumeAutoSlide();
+			}
+		);
+		
+		// 초기 자동 슬라이드 시작
+		startAutoSlide();
+		console.log("[슬라이더] 자동 슬라이드 시작됨");
+	} else {
+		console.log("[슬라이더] 슬라이드가 없습니다.");
 	}
 
 	

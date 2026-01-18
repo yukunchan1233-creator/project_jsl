@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +17,16 @@ import service.MemberSave;
 import service.MyDelete;
 import service.MyWishList;
 import service.UseridCheck;
-import service.GoogleLogin;  // 추가
+import service.GoogleLogin;
+import service.ProfileEdit;
+import service.ProfileUpdate;
+import service.MypageMain;
+import service.MyDeleteSelected;
 
-
+@MultipartConfig(
+	maxFileSize = 10 * 1024 * 1024, // 10MB
+	maxRequestSize = 10 * 1024 * 1024
+)
 @WebServlet("/mem/*")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -63,12 +71,26 @@ public class MemberController extends HttpServlet {
 		case "/logout.do":
 			new MemberLogout().doCommand(request, response);
 			break;
+		case "/mypageMain.do":
+			new MypageMain().doCommand(request, response);
+			page = "/member/mypage.jsp";
+			break;
 		case "/mypage.do":
 			new MyWishList().doCommand(request, response);
 			page = "/member/wishlist.jsp";
 			break;
+		case "/profileEdit.do":
+			new ProfileEdit().doCommand(request, response);
+			page = "/member/profileEdit.jsp";
+			break;
+		case "/profileUpdate.do":
+			new ProfileUpdate().doCommand(request, response);
+			break;
 		case "/mywishDelete.do":
 			new MyDelete().doCommand(request, response);
+			break;
+		case "/mywishDeleteSelected.do":
+			new MyDeleteSelected().doCommand(request, response);
 			break;
 		default:
 			System.out.println("잘못된 요청입니다.");

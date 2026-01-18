@@ -18,22 +18,22 @@
     </div>
     
     <div class="sub-container">
-        <%-- 검색 영역 --%>
+        <%-- 検索領域 --%>
         <div class="search-group">
             <div class="count">
-                <%-- 총 게시글 수 표시 (BlogSelectAll 서비스에서 설정) --%>
-                <span class="count">총게시글 : ${totalCount}</span>
+                <%-- 総投稿数表示 (BlogSelectAllサービスで設定) --%>
+                <span class="count">総投稿数 : ${totalCount}</span>
             </div>
             <div class="search">
-                <%-- 검색 폼: 제목 또는 내용으로 검색 가능 --%>
+                <%-- 検索フォーム: タイトルまたは内容で検索可能 --%>
                 <form name="my" method="post" action="${pageContext.request.contextPath}/port/list.do" onsubmit="return check()">
                     <select name="type">
-                        <option value="">선택</option>
-                        <option value="title">제목</option>
-                        <option value="content">내용</option>
+                        <option value="">選択</option>
+                        <option value="title">タイトル</option>
+                        <option value="content">内容</option>
                     </select>
                     <input type="text" name="keyword" value="${param.keyword}">
-                    <button type="submit">검색</button>
+                    <button type="submit">検索</button>
                 </form>
             </div>
         </div>
@@ -48,7 +48,7 @@
 	            </div>
 	            <%-- 포트폴리오 이미지 --%>
 	            <div class="search-img">
-	                <img src="${pageContext.request.contextPath}/img/${item.imgfile}" alt="단품이미지">
+	                <img src="${pageContext.request.contextPath}/img/${item.imgfile}" alt="商品画像">
 	            </div>
 	            <div class="search-text">
 	                <div>
@@ -91,8 +91,8 @@
 	         </c:if>
             </div>
             <div class="writer">
-                <%-- 글쓰기 버튼: 포트폴리오 작성 페이지로 이동 --%>
-                <a href="${pageContext.request.contextPath}/port/write.do">글쓰기</a>
+                <%-- 書き込みボタン: ポートフォリオ作成ページへ移動 --%>
+                <a href="${pageContext.request.contextPath}/port/write.do">書き込み</a>
             </div>
         </div>
    
@@ -102,7 +102,7 @@
     
     function check() {
         if(!my.keyword.value) {
-            alert("검색어를 입력하세요");
+            alert("検索語を入力してください");
             my.keyword.focus();
             return false;
         }
@@ -110,16 +110,16 @@
     }
     
 	$(".wish").on("click", function() {
-		//로그인한 사람만 찜 할수 있다.
+		//ログインした人だけお気に入りできる
 		var userid = "${sessionScope.userid}";
 		var blogbno = $(this).data("blogbno");
 		console.log(userid);
 		console.log(blogbno);
 		if(!userid){
-			alert("블로그 찜은 로그인이 필요합니다.");
+			alert("お気に入り機能はログインが必要です。");
 			return;
 		}
-		//동기식이건, 비 동기식이던 아이디와 블로그 번호를 서버로 넘겨줘야 insert하겠지.
+		//同期式でも非同期式でもIDとブログ番号をサーバーに送らなければinsertできない
 		$.ajax({
 			 type: 'post',
 			 data: {userid:userid,blogbno:blogbno},
@@ -127,7 +127,7 @@
 			 success:function(res) {
 				 alert(res);
 			 },error:function() {
-				 alert("오류발생");
+				 alert("エラーが発生しました");
 			 }
 		 })
 	})

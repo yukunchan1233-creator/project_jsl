@@ -35,8 +35,16 @@ public class ProductUpdate implements Command {
 		String image_path = request.getParameter("image_path");
 		String buy_link = request.getParameter("buy_link");
 		
+		// subcategory 공백 제거 및 기본값 설정
+		if(subcategory != null) {
+			subcategory = subcategory.trim();
+		}
+		if(subcategory == null || subcategory.isEmpty()) {
+			subcategory = "런닝머신";
+		}
+		
 		if(pnoStr == null || pnoStr.isEmpty()) {
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory);
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + java.net.URLEncoder.encode(subcategory, "UTF-8"));
 			return;
 		}
 		
@@ -63,27 +71,48 @@ public class ProductUpdate implements Command {
 		}
 		
 		// 이미지 파일 업로드 처리
+		ProductDao tempDao = new ProductDao();
+		ProductDto existingProduct = tempDao.selectProduct(pno);
+		String existingImagePath = null;
+		if(existingProduct != null) {
+			existingImagePath = existingProduct.getImage_path();
+		}
+		
+		System.out.println("[ProductUpdate] 기존 이미지 경로: " + existingImagePath);
+		System.out.println("[ProductUpdate] 전달받은 image_path 파라미터: " + image_path);
+		
 		String uploadedImagePath = FileUploadUtil.uploadFile(request, "image_file");
+		System.out.println("[ProductUpdate] 업로드된 새 이미지 경로: " + uploadedImagePath);
+		
 		if(uploadedImagePath != null && !uploadedImagePath.isEmpty()) {
-			// 새 이미지가 업로드된 경우, 기존 이미지 삭제
-			ProductDao tempDao = new ProductDao();
-			ProductDto existingProduct = tempDao.selectProduct(pno);
-			if(existingProduct != null && existingProduct.getImage_path() != null) {
-				FileUploadUtil.deleteFile(request, existingProduct.getImage_path());
+			// 새 이미지가 업로드된 경우
+			System.out.println("[ProductUpdate] 새 이미지가 업로드되었습니다. 기존 이미지 삭제 시도...");
+			// 기존 이미지 삭제
+			if(existingImagePath != null && !existingImagePath.isEmpty()) {
+				FileUploadUtil.deleteFile(request, existingImagePath);
+				System.out.println("[ProductUpdate] 기존 이미지 삭제 완료: " + existingImagePath);
 			}
 			image_path = uploadedImagePath;
-		} else if(image_path == null || image_path.isEmpty()) {
-			// 기존 상품 정보 조회하여 기존 이미지 경로 사용
-			ProductDao tempDao = new ProductDao();
-			ProductDto existingProduct = tempDao.selectProduct(pno);
-			if(existingProduct != null) {
-				image_path = existingProduct.getImage_path();
+			System.out.println("[ProductUpdate] 새 이미지 경로로 설정: " + image_path);
+		} else {
+			// 새 이미지가 업로드되지 않은 경우
+			if(image_path != null && !image_path.isEmpty()) {
+				// hidden input으로 전달된 기존 이미지 경로 사용
+				System.out.println("[ProductUpdate] 전달받은 기존 이미지 경로 사용: " + image_path);
+			} else if(existingImagePath != null && !existingImagePath.isEmpty()) {
+				// DB에서 조회한 기존 이미지 경로 사용
+				image_path = existingImagePath;
+				System.out.println("[ProductUpdate] DB에서 조회한 기존 이미지 경로 사용: " + image_path);
 			} else {
+				// 기본 이미지 사용
 				image_path = "images/default.jpg";
+				System.out.println("[ProductUpdate] 기본 이미지 사용: " + image_path);
 			}
 		}
+		
 		dto.setImage_path(image_path);
 		dto.setDetail_images(image_path); // 상세 이미지는 대표 이미지와 동일하게
+		System.out.println("[ProductUpdate] 최종 이미지 경로: " + image_path);
 		
 		dto.setBuy_link(buy_link);
 		
@@ -94,7 +123,9 @@ public class ProductUpdate implements Command {
 		// 4단계: 결과에 따라 리다이렉트
 		if(result > 0) {
 			// 성공: 상품 목록 페이지로 이동
-			RedirectUtil.redirect(request, response, "/portfolio.do?sub=" + subcategory);
+			// subcategory URL 인코딩
+			String encodedSub = java.net.URLEncoder.encode(subcategory, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/portfolio.do?sub=" + encodedSub);
 		} else {
 			// 실패: 에러 메시지와 함께 다시 수정 폼으로
 			request.setAttribute("error", "상품 수정에 실패했습니다.");

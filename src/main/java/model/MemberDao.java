@@ -120,6 +120,12 @@ public class MemberDao {
 			dto.setPassword(rs.getString("password"));
 			dto.setPhone(rs.getString("phone"));
 			dto.setEmail(rs.getString("email"));
+			try {
+				dto.setProfile_image(rs.getString("profile_image"));
+			} catch (Exception e) {
+				// profile_image 컬럼이 없을 수 있음
+				dto.setProfile_image(null);
+			}
 		}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,6 +162,12 @@ public class MemberDao {
 				dto.setPassword(rs.getString("password"));
 				dto.setPhone(rs.getString("phone"));
 				dto.setEmail(rs.getString("email"));
+				try {
+					dto.setProfile_image(rs.getString("profile_image"));
+				} catch (Exception e) {
+					// profile_image 컬럼이 없을 수 있음
+					dto.setProfile_image(null);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -199,6 +211,113 @@ public class MemberDao {
 		}
 		return result;
 		
+	}
+	
+	//찜 선택 삭제 (여러 개)
+	public boolean deleteWishSelected(String wishBnos) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		// 콤마로 구분된 wish_bno들을 배열로 변환
+		String[] wishBnoArray = wishBnos.split(",");
+		
+		// IN 절을 위한 플레이스홀더 생성 (?, ?, ?, ...)
+		StringBuilder placeholders = new StringBuilder();
+		for (int i = 0; i < wishBnoArray.length; i++) {
+			if (i > 0) placeholders.append(",");
+			placeholders.append("?");
+		}
+		
+		String sql = "delete from htm_mywish where wish_bno in (" + placeholders.toString() + ")";
+		
+		boolean result = false;
+		
+		try {
+			conn = DBManager.getInstance();
+			pstmt = conn.prepareStatement(sql);
+			
+			// 각 wish_bno를 파라미터로 설정
+			for (int i = 0; i < wishBnoArray.length; i++) {
+				pstmt.setInt(i + 1, Integer.parseInt(wishBnoArray[i].trim()));
+			}
+			
+			int row = pstmt.executeUpdate();
+			result = (row > 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 개인정보 수정 메서드
+	 * @param dto 수정할 회원 정보
+	 * @return 수정 성공 여부
+	 */
+	public boolean updateMember(MemberDto dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		// 비밀번호와 프로필 사진 변경 여부에 따라 SQL 분기
+		String sql;
+		boolean hasPassword = dto.getPassword() != null && !dto.getPassword().isEmpty();
+		boolean hasProfile = dto.getProfile_image() != null && !dto.getProfile_image().isEmpty();
+		
+		if(hasPassword && hasProfile) {
+			// 비밀번호와 프로필 사진 모두 변경
+			sql = "update htm_member set writer=?, phone=?, email=?, password=?, profile_image=? where userid=?";
+		} else if(hasPassword) {
+			// 비밀번호만 변경
+			sql = "update htm_member set writer=?, phone=?, email=?, password=? where userid=?";
+		} else if(hasProfile) {
+			// 프로필 사진만 변경
+			sql = "update htm_member set writer=?, phone=?, email=?, profile_image=? where userid=?";
+		} else {
+			// 비밀번호와 프로필 사진 모두 변경 안 함
+			sql = "update htm_member set writer=?, phone=?, email=? where userid=?";
+		}
+		
+		boolean result = false;
+		
+		try {
+			conn = DBManager.getInstance();
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getWriter());
+			pstmt.setString(2, dto.getPhone());
+			pstmt.setString(3, dto.getEmail());
+			
+			int paramIndex = 4;
+			if(hasPassword) {
+				pstmt.setString(paramIndex++, dto.getPassword());
+			}
+			if(hasProfile) {
+				pstmt.setString(paramIndex++, dto.getProfile_image());
+			}
+			pstmt.setString(paramIndex, dto.getUserid());
+			
+			int row = pstmt.executeUpdate();
+			result = (row > 0);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 	
 	

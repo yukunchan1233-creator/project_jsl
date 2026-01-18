@@ -10,17 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.BlogAiTranslate;
-import service.BlogAiWrite;
 import service.BlogDelete;
 import service.BlogSelectAll;
 import service.BlogUpdate;
 import service.BlogView;
 import service.BlogWrite;
 import service.MyWishList;
-import service.ReplyDelete;
-import service.ReplyUpdate;
-import service.ReplyWrite;
 import service.mywish;
 
 
@@ -68,12 +63,6 @@ public class BlogController extends HttpServlet {
 		case "/write.do":
 			page = "/portfolio/write.jsp";
 			break;
-		case "/aiWrite.do":
-			new BlogAiWrite().doCommand(request, response);
-			break;
-		case "/aiTranslate.do":
-			new BlogAiTranslate().doCommand(request, response);
-			break;
 		case "/writepro.do":
 			new BlogWrite().doCommand(request, response);
 			break;
@@ -95,15 +84,6 @@ public class BlogController extends HttpServlet {
 			break;
 		case "/mywish.do":
 			new mywish().doCommand(request, response);
-			break;
-		case "/replyWrite.do":  // 댓글 등록
-			new ReplyWrite().doCommand(request, response);
-			break;
-		case "/replyUpdate.do":  // 댓글 수정
-			new ReplyUpdate().doCommand(request, response);
-			break;
-		case "/replyDelete.do":  // 댓글 삭제
-			new ReplyDelete().doCommand(request, response);
 			break;
 		
 		default:
